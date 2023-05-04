@@ -1,0 +1,48 @@
+@startuml
+
+class Robot{
+    - final PotenciaBase: 10
+    - nroSerie: String 
+    - potenciaTraccion: Integer 
+    - traccion: Traccion 
+
+    + toString(): String 
+}
+
+abstract class Traccion{
+
+    - nombre: String 
+    - restaPotencia: Integer 
+
+    + avanzar(): void
+}
+
+class Rueda{
+    - rodado = 100 
+
+    + avanzar(): void 
+}
+
+class Oruga{
+
+    - rodado = 400
+
+    + agregarSensor(Sensor): void
+    + avanzar(): void 
+
+}
+
+class Sensor{
+    - nombre 
+
+    + medirTemperatura(): void 
+}
+
+' Relaciones 
+
+Robot *-- Traccion 
+Traccion <|-- Rueda 
+Traccion <|-- Oruga 
+Oruga *-- Sensor 
+
+@enduml
