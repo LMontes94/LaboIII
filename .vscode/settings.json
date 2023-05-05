@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./src/Ejercicio13/clases"
+    ]
+}
