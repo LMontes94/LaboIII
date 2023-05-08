@@ -1,0 +1,29 @@
+@startuml
+
+title ** Sistema Operativo **
+
+class SistemaOperativo{
+    - tarea: Tarea 
+    
+    + agregarPorceso(): void 
+    + ejecutarProcesos(): void 
+    + alteranado(): void 
+    + secuencial(): void 
+    + prioritario(): void 
+    + eliminarProceso(): void
+}
+
+abstract class Tarea{
+    - nombre: String 
+    - prioridad: Array 
+    - tiempo_ejecucion: Integer  
+
+}
+
+'relaciones 
+
+SistemaOperativo *-- Tarea 
+Tarea <|-- TareaUsuario 
+Tarea <|-- TareaSistema 
+
+@enduml
