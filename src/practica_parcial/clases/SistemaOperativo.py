@@ -26,19 +26,17 @@ class SistemaOperativo:
         
         print(f"Preceso finalizado.. en {i}s.")
 
-    def eliminar_proceso(self,tarea):
-        if isinstance(tarea, TareaSistema):
-            return self.tareas['sistema'].remove(tarea)
-        
+    def eliminar_proceso(self, tarea):
+      if isinstance(tarea, TareaSistema):
+        return self.tareas['sistema'].remove(tarea)
+      elif tarea in self.tareas['usuario']:
         return self.tareas['usuario'].remove(tarea)
-
+      
     def alternado(self):
-        while self.tareas['sistema'] != 0 or self.tareas['usuario'] != 0:
-            if self.tareas['sistema']: 
-                tarea_sistema = self.tareas['sistema'].pop(0)
+        while len(self.tareas['sistema']) != 0 or len(self.tareas['usuario']) != 0:
+                tarea_sistema = self.tareas['sistema'].pop()
                 self.ejecutar_proceso(tarea_sistema)
-            else:
-                tarea_usuario = self.tareas['usuario'].pop(0)
+                tarea_usuario = self.tareas['usuario'].pop()
                 self.ejecutar_proceso(tarea_usuario)               
     
     def secuencial(self):
