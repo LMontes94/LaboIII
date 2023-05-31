@@ -1,0 +1,120 @@
+@startuml
+
+class EmpresaTransporte{
+    - barcos: List<Barco>
+    - camiones: List<Camion>
+    - contenedores: List<contenedor>
+    - sedes: List<Sede>
+
+    + calcularDistancia(origen: Sede, destino: Sede): int
+    + cargarContenedor(barco: Barco, contenedor: Contenedor): bool
+    + descargarContenedor(barco: Barco, contenedor: Contenedor): bool
+    + cargarCamion(camion: Camion, contenedor: Contenedor): bool
+    + descargarCamion(camion: Camion): Contenedor
+    + calcularPrecio(viaje: Viaje): int
+    + obtenerContenedorMasViajadoCompleto(): Contenedor
+    + obtenerBarcoMayorKm(): Barco
+    + obtenerBarcoMenorKm(): Barco
+}
+
+package Barcos{
+
+  abstract class Barco{
+   - id: string 
+   - capacidadMaxima: int
+   - pesoMaximo: int
+   - contenedores: List<Contenedor>
+   - viaje: Viaje 
+
+   + cargarContenedor(contenedor: Contenedor): bool
+   + descargarContenedor(contenedor: Contenedor): bool
+   + calcularKmRecorridos(): int
+  }
+
+  class BarcoBasico{}
+  class BarcoEspecial{}
+
+}
+
+package Contenedores{
+  abstract class Contenedor{
+       - id: Integer
+       - interior: Dimension
+       - exterior: Dimension
+       - pesoMax: Double 
+       - volumenMax: Double 
+       - pies: Integer
+       - precioBase: Double  
+       - mercaderias: List<Mercaderia>
+   }
+   
+   class ContenedorBasico{}
+   class ContenedorBasicoHC{}
+   class ContenedorFlatRack{}
+   class Dimension{
+    - ancho: Double
+    - alto: Double 
+    - largo: Double  
+   }
+}
+
+class Camion{
+    - patente: string
+    - contenedor : Contenedor
+    - viaje: Viaje 
+    + cargarContenedor(): void 
+}
+
+class Mercaderia{
+    - id: Integer
+    - descripcion: String 
+    - peso: Double 
+    - volumen: Double 
+}
+
+class cliente{
+    - nroCliente: Integer
+    - nombre: String
+    - mercaderias: List<Mercaderia>
+
+    + agregarMercaderia(): Mercaderia 
+}
+
+class Viaje{
+    - sedeInicial: Sede 
+    - SedeFinal: Sede 
+
+    + calcularDistancia(): Double 
+}
+
+class Sede{
+    - nombre: String 
+    - latitud: Double 
+    - longitud: Double 
+}
+  'Relaciones
+
+  EmpresaTransporte *-- Barcos 
+  EmpresaTransporte *-- Contenedores
+  EmpresaTransporte *-- Camion 
+
+  Barco <|-- BarcoBasico
+  Barco <|-- BarcoEspecial
+
+  Contenedor <|-- ContenedorBasico
+  Contenedor <|-- ContenedorBasicoHC 
+  Contenedor <|-- ContenedorFlatRack 
+  
+  Barcos *.. Contenedores
+  Camion *.r. Contenedores 
+
+  Contenedor *-- Mercaderia 
+  Contenedor *-- Dimension
+
+  cliente *-- Mercaderia
+
+  Barco *-- Viaje 
+  Camion *-- Viaje 
+
+  Viaje *-- Sede 
+@enduml
