@@ -85,6 +85,7 @@ class Viaje{
     - SedeFinal: Sede 
 
     + calcularDistancia(): Double 
+    + calcularTiempoPromedio(): Double
 }
 
 class Sede{
@@ -117,4 +118,5 @@ class Sede{
   Camion *-- Viaje 
 
   Viaje *-- Sede 
+  Viaje o-- GPS
 @enduml

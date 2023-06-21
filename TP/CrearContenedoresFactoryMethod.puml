@@ -1,0 +1,30 @@
+@startuml
+
+title ** Crear Contenedor Factory Method 
+abstract class Contenedor {
+    + calcularVolumen(): float
+}
+
+class ContenedorFactory {
+    + crearContenedor(tipo: string): Contenedor
+}
+
+class ContenedorBasico {
+    + calcularVolumen(): float
+}
+
+class ContenedorVentilado {
+    + calcularVolumen(): float
+}
+
+class ContenedorOpenTop {
+    + calcularVolumen(): float
+}
+
+Contenedor <|-- ContenedorBasico
+Contenedor <|-- ContenedorVentilado
+Contenedor <|-- ContenedorOpenTop
+
+ContenedorFactory --> Contenedor
+
+@enduml
