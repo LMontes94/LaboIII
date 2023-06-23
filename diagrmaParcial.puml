@@ -1,0 +1,125 @@
+@startuml
+
+title ** Gimansio Parcial 
+
+class Gimansio{
+    - creadorPromociones : CreadorPromociones
+    - creadorSocio: CreadorSocio
+    - creadorActividad: CreadorActividad
+    - creadorInstructor: CreadorInstructor
+    - calculadorCuotas: CalculadorCuotas
+}
+
+class CreadorPromociones{
+    - promocion_x_mes: {mes: int, promocion: Promocion}
+    + crearPromocion(int,Promocion): void
+    + getPromocion(): Promocion
+}
+
+class CreadorSocio{
+    - socio: {dni: int,socio:Socio}
+    + altaSocio(Socio): void
+    + getSocio(): Socio
+}
+
+class CreadorInstructor{
+    - instructor: {id: int, instructor: Instructor}
+    + crearInstructor(int, Instructor)
+    + getInstructor(): Instructor
+}
+
+class CreadorActividad{
+    - actividad: {id,Actividad}
+    + crearActividad(id,Actividad): void
+    + getActividad(): Actividad
+}
+
+class CalculadorCuotas{
+    + calcularCuota(lista_socio,dni)
+}
+
+class Instructor{
+    - nombre: String 
+    - id: Integer 
+    - actividad: Actividad 
+    + getters y setters()
+}
+
+class Actividad{
+    - nombre: String 
+    - precio: Double
+    - instructor: Instructor
+    - dias: String 
+    - horas: String 
+    + getters y setters()
+}
+
+class Socio{
+    - id: Integer 
+    - nombre: String 
+    - apellido: String
+    - inscripcion: Inscripcion
+    - dni: Integer
+}
+
+abstract class Inscripcion{
+    + getNombre()
+    + getActividades()
+    + getValor()
+}
+
+class Promocion{
+    - nombre: String
+    - actividades: Actividad[]
+    - precio: Double
+    + getNombre():String
+    + getActividades(): Actividades[]
+    + getValor()
+}
+
+class PaseLibre{
+    - nombre: String
+    - actividades: Actividad[]
+    - precio: Double
+    + getNombre():String
+    + getActividades(): Actividades[]
+    + getValor()
+}
+
+class Estandar{
+    - nombre: String
+    - actividades: Actividad[]
+    - precio: Double
+    + getNombre():String
+    + getActividades(): Actividades[]
+    + getValor()
+}
+
+' Relaciones
+
+Gimansio *-- CreadorPromociones
+Gimansio *-- CreadorActividad
+Gimansio *-- CreadorSocio
+Gimansio *-- CreadorInstructor
+Gimansio *-- CalculadorCuotas
+
+CreadorPromociones *-- Promocion
+
+Inscripcion <|-- Promocion
+Inscripcion <|-- PaseLibre
+Inscripcion <|-- Estandar 
+
+CreadorSocio *-- Socio 
+
+Socio *-- Inscripcion
+
+CreadorInstructor *-- Instructor
+CreadorActividad *-- Actividad
+
+Instructor *--* Actividad
+Inscripcion *-- Actividad 
+
+CalculadorCuotas *-- CreadorSocio
+
+
+@enduml

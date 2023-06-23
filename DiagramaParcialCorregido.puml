@@ -1,0 +1,119 @@
+@startuml
+
+title ** Gimnasio Parcial **
+
+class Gimnasio{
+    - creadorPromociones: CreadorPromociones
+    - creadorSocio: CreadorSocio
+    - creadorActividad: CreadorActividad
+    - creadorInstructor: CreadorInstructor
+    - calculadorCuotas: CalculadorCuotas
+}
+
+class CreadorPromociones{
+    - promocionesPorMes: Map<int, Promocion>
+    + crearPromocion(int, Promocion): void
+    + getPromocion(int): Promocion
+}
+
+class CreadorSocio{
+    - socios: Map<int, Socio>
+    + altaSocio(Socio): void
+    + getSocio(int): Socio
+}
+
+class CreadorInstructor{
+    - instructores: Map<int, Instructor>
+    + crearInstructor(int, Instructor): void
+    + getInstructor(int): Instructor
+}
+
+class CreadorActividad{
+    - actividades: Map<int, Actividad>
+    + crearActividad(int, Actividad): void
+    + getActividad(int): Actividad
+}
+
+class CalculadorCuotas{
+    + calcularCuota(int): double
+}
+
+class Instructor{
+    - nombre: String
+    - id: int
+    - actividad: Actividad
+    + getters y setters()
+}
+
+class Actividad{
+    - nombre: String
+    - precio: double
+    - instructor: Instructor
+    - dias: String
+    - horas: String
+    + getters y setters()
+}
+
+class Socio{
+    - id: int
+    - nombre: String
+    - apellido: String
+    - inscripciones: List<Inscripcion>
+    - dni: int
+    - cuotaMensual: CuotaMensual
+}
+
+class Promocion{
+    - nombre: String
+    - actividades: List<Actividad>
+    - precio: double
+    + getters y setters()
+}
+
+class PaseLibre{
+    - nombre: String
+    - actividades: List<Actividad>
+    - precio: double
+    + getters y setters()
+}
+
+class CuotaMensual{
+    + calcularCuota(): double
+}
+
+class Estandar{
+    - nombre: String
+    - actividades: List<Actividad>
+    - precio: double
+    + getters y setters()
+}
+
+' Relaciones
+
+Gimnasio *-- CreadorPromociones
+Gimnasio *-- CreadorActividad
+Gimnasio *-- CreadorSocio
+Gimnasio *-- CreadorInstructor
+Gimnasio *-- CalculadorCuotas
+
+CreadorPromociones *-- Promocion
+
+Inscripcion <|-- Promocion
+Inscripcion <|-- PaseLibre
+Inscripcion <|-- Estandar
+
+CreadorSocio *-- Socio
+
+Socio *-- Inscripcion
+Socio -- CuotaMensual
+
+CreadorInstructor *-- Instructor
+CreadorActividad *-- Actividad
+
+Instructor *--* Actividad
+Inscripcion *-- Actividad
+
+CalculadorCuotas -- Socio
+
+@enduml
+
