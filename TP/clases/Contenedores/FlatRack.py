@@ -1,7 +1,8 @@
 
-from Clases.Contenedores.Contenedor import Contenedor
-from Clases.Excepciones.ContenerdorLlenoException import ContenedorLlenoException
-from Clases.Excepciones.ExcesoMedidasException import ExcesoMedidasException
+from clases.Contenedores.Contenedor import Contenedor
+from clases.Exception.ContenerdorLlenoException import ContenedorLlenoException
+from clases.Exception.ExcesoMedidasException import ExcesoMedidasException
+from clases.Exception.NoHayContenedoresException import NoHayContenedoresException
 
 
 class FlatRack(Contenedor):
@@ -16,5 +17,23 @@ class FlatRack(Contenedor):
                 raise ContenedorLlenoException("El contenedor esta lleno!!")
         elif self.get_interior().alto < mercaderia.medida.alto or self.get_interior().largo < mercaderia.medida.largo:
                 raise ExcesoMedidasException(f"Las medidas de la {mercaderia.nombre} exceden el limite!!")
-        else:
-                self.cargar_mercaderia(mercaderia)
+        return True
+    
+    def manejar(self, mercaderia):
+
+        try:
+            self.puedeManejar(mercaderia)              
+            self.cargar_mercaderia(mercaderia)
+        except (ContenedorLlenoException, ExcesoMedidasException) as e:
+          
+           print(f"Error {e.get_code()} / {e.get_mensaje}")
+           try: 
+              self.noHaySiguiente()
+              self.siguiente.manejar(mercaderia)
+           except NoHayContenedoresException as e:
+             print(f"Error {e.get_code()} / {e.get_mensaje}")
+
+        
+    
+    def puedeManejar(self, mercaderia):
+       return self.validarCargaMercaderia(mercaderia)

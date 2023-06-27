@@ -4,6 +4,7 @@ from clases.Contenedores.Medida import Medida
 from clases.Exception.ContenerdorLlenoException import ContenedorLlenoException
 from clases.Exception.ExcesoMedidasException import ExcesoMedidasException
 from clases.Exception.SinUnicaCargaException import SinUnicaCargaExcpetion
+from clases.Mercaderia.Alimento import Alimento
 from clases.Mercaderia.Mercaderia import Mercaderia
 from clases.Despacho.Manejador import Manejador
 
@@ -135,7 +136,13 @@ class Contenedor(Manejador):
             raise ExcesoMedidasException(
                 f"Las medidas de la {mercaderia.nombre} exceden el limite!!")
 
-        self.cargar_mercaderia(mercaderia)
-
-    def manejar(self, mercaderia):
-        pass
+        return True
+    
+    @abstractmethod
+    def puedeManejar(self, mercaderia):
+       pass
+    
+    def soloAlimento(self,mercaderia):       
+        if not isinstance(mercaderia, Alimento):
+                return False
+        return True

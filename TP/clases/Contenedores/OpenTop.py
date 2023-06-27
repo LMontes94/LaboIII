@@ -5,12 +5,10 @@ from clases.Exception.ExcesoMedidasException import ExcesoMedidasException
 from clases.Exception.NoHayContenedoresException import NoHayContenedoresException
 
 
-class BasicoHC(Contenedor):
-    def __init__(self, id):
-        super().__init__(id, 235.0, 230.0, 1200.0, 245.0, 260.0, 1210.0)
-        self.set_pies(40)
-        self.set_max_Peso(32500.0)
-        self.set_max_Volumen(67.7)
+class OpenTop(Contenedor):
+    def __init__(self, id, int_ancho, int_largo, ext_ancho, ext_largo):
+        super().__init__(id, int_ancho, None, int_largo, ext_ancho, None, ext_largo)
+        self.poner_cobertor = False
 
     def manejar(self, mercaderia):
 
@@ -30,3 +28,4 @@ class BasicoHC(Contenedor):
     
     def puedeManejar(self, mercaderia):
        return self.validarCargaMercaderia(mercaderia)
+    

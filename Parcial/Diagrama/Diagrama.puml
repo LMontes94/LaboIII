@@ -1,0 +1,48 @@
+@startuml
+
+title * Bicicleteria
+class Componente {
+  - nombre: String
+  - precio: float
+}
+
+class Kit {
+  - componentes: List<Componente>
+  - descuento: float
+  - diaFestivo: DiaFestivo
+  + agregarComponente(componente: Componente): void
+  + quitarComponente(componente: Componente): void
+  + calcularPrecio(): float
+  + aplicarDescuento(): float
+  + establecerDiaFestivo(diaFestivo: DiaFestivo): void
+}
+
+interface DiaFestivo {
+  + calcularDescuento(kit: Kit): float
+}
+
+class AlgoFraidei {
+  + calcularDescuento(kit: Kit): float
+}
+
+class NavidadYAnioNuevo {
+  + calcularDescuento(kit: Kit): float
+}
+
+class Bicicleta {
+  - modelo: String
+  - precio: float
+  - componentes: List<Componente>
+  + agregarComponente(componente: Componente): void
+  + quitarComponente(componente: Componente): void
+  + calcularPrecio(): float
+}
+
+Kit "1" --> "*" Componente
+Kit "1" o--> DiaFestivo : usa
+Bicicleta "1" --> "*" Componente
+
+DiaFestivo <|.. AlgoFraidei
+DiaFestivo <|.. NavidadYAnioNuevo
+
+@enduml

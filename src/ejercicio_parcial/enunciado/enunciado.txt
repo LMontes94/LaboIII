@@ -1,0 +1,30 @@
+Modelar, de acuerdo al paradigma de programación orientado a objetos, una aplicación para el
+manejo de procesos (tareas) del sistema operativo CuvlOS.
+Este sistema operativo maneja 2 tipos de tareas, tareas de usuario y tareas del sistema. A su vez, de
+cada tarea se conoce su nombre, prioridad y su tiempo estimado de ejecución. El tiempo estimado de
+ejecución es un número entero que representa la cantidad de ciclos de CPU a consumir para
+completar la tarea.
+La prioridad de las tareas del sistema siempre están en el rango [0, 1], mientras que la prioridad de
+las tareas de un usuario puede estar en el rango [0, 9]. Considere 0 más prioritario y 9 menos
+prioritario.
+El sistema operativo cuenta con 3 algoritmos para ejecutar los procesos:
+● Alternado.
+● Secuencial.
+● Prioritario.
+El modo Alternado, como su nombre lo indica, ejecuta 1 proceso del sistema y 1 un proceso de
+usuario.
+El modo Secuencial, ejecuta primero todos los procesos del sistema y luego todos los procesos de
+usuario.
+Finalmente, el modo Prioritario, ejecuta los procesos según su prioridad, ejecutando primero aquellos
+que tengan mayor prioridad.
+Una vez que un proceso es ejecutado, el mismo es eliminado del sistema.
+Por defecto, cuando el sistema operativo se inicia, el algoritmo de ejecución seleccionado es
+Alternado.
+
+La aplicación debe soportar la creación de procesos tanto de sistema como de usuario y el agregado
+de los mismos a la cola de ejecución del sistema operativo.
+Se pide:
+a. Diagrama de clase y código de la solución.
+b. Implementar los métodos necesarios para agregar y eliminar procesos al sistema operativo.
+c. Dado un conjunto de procesos y un algoritmo de planificación, implementar los métodos
+necesarios para conocer en qué ciclo de CPU finaliza cada proceso.

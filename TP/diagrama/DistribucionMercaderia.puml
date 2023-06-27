@@ -2,10 +2,10 @@
 
 title ** Distrubucion de Mercaderia - Patron Chain of Responsibility **
 
-abstract class Manejador {
-    + manejar(mercaderia: Mercaderia): void
-    + setSiguiente(manejador: Manejador): void
-}
+    abstract class Manejador {
+        + manejar(mercaderia: Mercaderia): void
+        + setSiguiente(manejador: Manejador): void
+    }
 
 class DespachoMercaderia {
     - siguiente: Manejador
