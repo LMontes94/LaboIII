@@ -1,6 +1,6 @@
 @startuml
 
-class EmpresaTransporte{
+class MainEmpresa{
     - barcos: List<Barco>
     - camiones: List<Camion>
     - contenedores: List<contenedor>
@@ -17,106 +17,208 @@ class EmpresaTransporte{
     + obtenerBarcoMenorKm(): Barco
 }
 
-package Barcos{
-
-  abstract class Barco{
-   - id: string 
-   - capacidadMaxima: int
-   - pesoMaximo: int
-   - contenedores: List<Contenedor>
-   - viaje: Viaje 
-
-   + cargarContenedor(contenedor: Contenedor): bool
-   + descargarContenedor(contenedor: Contenedor): bool
-   + calcularKmRecorridos(): int
-  }
-
-  class BarcoBasico{}
-  class BarcoEspecial{}
-
+abstract class SistemaPropulsion {
+    + gastoCombustible(): Integer
+    + activar(tiempo: int): void
+    + getNombre(): String
 }
 
-package Contenedores{
-  abstract class Contenedor{
-       - id: Integer
-       - interior: Dimension
-       - exterior: Dimension
-       - pesoMax: Double 
-       - volumenMax: Double 
-       - pies: Integer
-       - precioBase: Double  
-       - mercaderias: List<Mercaderia>
-   }
-   
-   class ContenedorBasico{}
-   class ContenedorBasicoHC{}
-   class ContenedorFlatRack{}
-   class Dimension{
-    - ancho: Double
-    - alto: Double 
-    - largo: Double  
-   }
+class Vela implements SistemaPropulsion {
+    - nombre: String = "Vela"
+    + gastoCombustible(): Integer
+    + activar(tiempo: int): void
+    + getNombre(): String
 }
+
+class Motor implements SistemaPropulsion {
+    - nombre: String = "Motor"
+    + gastoCombustible(): Integer
+    + activar(tiempo: int): void
+    + getNombre(): String
+}
+
+class Barco {
+    - viaje: Viaje
+    - sistemaPropulsion: SistemaPropulsion
+    - combustibleActual: float
+    + Barco(sistemaPropulsionInicial: SistemaPropulsion, combustibleActual: float)
+    + setSistemaPropulsion(sistemaPropulsion: SistemaPropulsion): void
+    + marchar(tiempo: int): void
+    + getCombustibleActual(): float
+    + getSistemaPropulsion(): String
+}
+
+class Viaje {
+    - sedeInicial: String
+    - sedeFinal: String
+    - horasTotales: int
+    + Viaje(barco: Barco)
+    + getHorasTotales(): int
+}
+
+class ModuloContable {
+    - gananciaPorContainer: float
+    + ModuloContable(gananciaPorContainer: float)
+    + getGanancia(contenedores: List<Container>): float
+}
+
+' relaciones 
+
+Barco *-- SistemaPropulsion
+Barco *-- Viaje
+ModuloContable *-- Viaje
+
+' notas
+
+note left of SistemaPropulsion
+Define los métodos para todos los sistemas de propulsión,
+como gastoCombustible() y activar(). 
+Las clases Vela y Motor son extenciones la clase abstracta, representando
+sistemas de propulsión específicos. 
+end note
+
+abstract class ContenedorHandler {
+    + setNext(handler: ContenedorHandler)
+    + manejar(contenedor: Contenedor): boolean
+}
+
+class BarcoBasico extends Barco implements ContenedorHandler {
+    - next: ContenedorHandler
+    + setNext(handler: ContenedorHandler)
+    + manejar(contenedor: Contenedor): boolean
+}
+
+class BarcoEspecial extends Barco implements ContenedorHandler {
+    - next: ContenedorHandler
+    + setNext(handler: ContenedorHandler)
+    + manejar(contenedor: Contenedor): boolean
+}
+
+abstract class Barco implements ContenedorHandler {
+    - next: ContenedorHandler
+    + setNext(handler: ContenedorHandler)
+    + manejar(contenedor: Contenedor): boolean
+}
+
+abstract class Contenedor {
+}
+
+class MainEmpresa {
+    - contenedorHandlers: ContenedorHandler[]
+    + distribuirContenedor(contenedor: Contenedor)
+}
+
+MainEmpresa o-- Contenedor
+MainEmpresa o-- ContenedorHandler
+
+' Notas
+
+note left of ContenedorHandler
+define los métodos para establecer el siguiente manejador en la cadena (setNext) y para manejar
+un contenedor en particular (manejar). 
+Cada tipo de barco (por ejemplo, BarcoBasico, BarcoEspecial)
+implementa esta clase abstracta y proporciona su propia
+implementación para manejar los contenedores.
+end note
+
+note right of MainEmpresa
+La clase MainEmpresa(Despacho) es la responsable de recibir un contenedor
+y distribuirlo a través de la cadena de manejadores. 
+Comienza enviando la solicitud al primer manejador, que se encargará de decidir si puede
+manejar el contenedor o pasarlo al siguiente manejador en caso contrario.
+end note
+
+    abstract class Manejador {
+        + manejar(mercaderia: Mercaderia): void
+        + setSiguiente(manejador: Manejador): void
+    }
+
+class DespachoMercaderia {
+    - siguiente: Manejador
+    + manejar(mercaderia: Mercaderia): void
+    + setSiguiente(manejador: Manejador): void
+}
+
+class Contenedor {
+    + manejar(mercaderia: Mercaderia): void
+}
+
+class Ventilado {
+    + manejar(mercaderia: Mercaderia): void
+}
+
+class HighCube {
+    + manejar(mercaderia: Mercaderia): void
+}
+
+class FlatRack {
+    + manejar(mercaderia: Mercaderia): void
+}
+
+class OpenTop {
+    + manejar(mercaderia: Mercaderia): void
+}
+
+class MainEmpresa {
+    - despacho: DespachoMercaderia
+    + distribuirMercaderia(mercaderia: Mercaderia): void
+}
+
+' relaciones 
+
+MainEmpresa ..> DespachoMercaderia
+
+DespachoMercaderia --> Contenedor
+Contenedor <|-- Ventilado
+Contenedor <|-- HighCube
+Contenedor <|-- FlatRack
+Contenedor <|-- OpenTop
+
+Manejador <|.. DespachoMercaderia
+Manejador <|.. Contenedor
+Manejador <|.. Ventilado
+Manejador <|.. HighCube
+Manejador <|.. FlatRack
+Manejador <|.. OpenTop
+
+' notas
+
+note right of Manejador
+Define la clase abstracta común para todos los manejadores (contenedores)
+en la Chain of Responsibility. 
+Tiene un método manejar(mercaderia: Mercaderia) que representa el punto
+de entrada para manejar una solicitud de distribución de mercadería.
+Además, tiene un método setSiguiente(manejador: Manejador) que establece
+el siguiente manejador en la cadena.
+end note 
+
+note top of DespachoMercaderia
+Actúa como el punto de inicio de la Chain of Responsibility. 
+Implementa la interfaz Manejador y tiene una referencia al siguiente
+manejador en la cadena (siguiente). 
+El método manejar(mercaderia: Mercaderia) en esta clase verifica si 
+puede manejar la mercadería en base a ciertos criterios 
+(como el tipo de carga, capacidad disponible, etc.). 
+Si no puede manejarla, pasa la solicitud al siguiente manejador en la cadena.
+end note
 
 class Camion{
-    - patente: string
-    - contenedor : Contenedor
-    - viaje: Viaje 
-    + cargarContenedor(): void 
+   - patente: String 
+   - costoFijo : double 20000 
+   - conteiner : Contenedor 
+   - ocupado: boolean 
+
+   + getPatente(): String
+   + setPatente(String): void
+   + getCostoFijo(): Double 
+   + setCostoFijo(Double): void
+   + getContenedor(): Contenedor
+   + setContenedor(Contenedor): void
+
+   + llevaConteiner(): boolean
 }
 
-class Mercaderia{
-    - id: Integer
-    - descripcion: String 
-    - peso: Double 
-    - volumen: Double 
-}
-
-class cliente{
-    - nroCliente: Integer
-    - nombre: String
-    - mercaderias: List<Mercaderia>
-
-    + agregarMercaderia(): Mercaderia 
-}
-
-class Viaje{
-    - sedeInicial: Sede 
-    - SedeFinal: Sede 
-
-    + calcularDistancia(): Double 
-    + calcularTiempoPromedio(): Double
-}
-
-class Sede{
-    - nombre: String 
-    - latitud: Double 
-    - longitud: Double 
-}
-  'Relaciones
-
-  EmpresaTransporte *-- Barcos 
-  EmpresaTransporte *-- Contenedores
-  EmpresaTransporte *-- Camion 
-
-  Barco <|-- BarcoBasico
-  Barco <|-- BarcoEspecial
-
-  Contenedor <|-- ContenedorBasico
-  Contenedor <|-- ContenedorBasicoHC 
-  Contenedor <|-- ContenedorFlatRack 
-  
-  Barcos *.. Contenedores
-  Camion *.r. Contenedores 
-
-  Contenedor *-- Mercaderia 
-  Contenedor *-- Dimension
-
-  cliente *-- Mercaderia
-
-  Barco *-- Viaje 
-  Camion *-- Viaje 
-
-  Viaje *-- Sede 
-  Viaje o-- GPS
+Camion <-- Contenedor
+MainEmpresa o-- Camion
 @enduml
+

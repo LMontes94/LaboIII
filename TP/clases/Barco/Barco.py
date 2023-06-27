@@ -3,22 +3,25 @@ from clases.Barco.SistemaPropulsion.SistemaPropulsion import SistemaPropulsion
 from clases.Contenedores.Contenedor import Contenedor
 from abc import ABC, abstractmethod
 
+from clases.Despacho.ContenedorManejador import ContenedorManejador
+from clases.Viaje.Viaje import Viaje
 
-class Barco(ABC):
+
+class Barco(ContenedorManejador):
 
     def __init__(self):
         self.__id = 0
         self.__max_Containers = 0
         self.__max_Peso = 0.0
         self.__conteiner = list()
-        self.__sede_Inicial = ''
-        self.__sede_Final = ''
         self.__km_Total = 0.0
         self.__es_Especial = False
         self.__peso_Actual = 0.0
+        self.__viaje = Viaje()
         self.__sistema_propulsion: SistemaPropulsion()
         self.__combustible_actual = 0.0
         self.CONSUMO_X_HORA = 6.0
+        self.siguiente = ContenedorManejador()
 
 # --------Getters & Setters-----------------
     # getters y setters id
@@ -62,24 +65,15 @@ class Barco(ABC):
 
     # getters y setters sedeInicial
 
-    def get_sede_Inicial(self):
-        return self.__sede_Inicial
+    def get_viaje(self):
+        return self.__viaje
 
-    def set_sede_Inicial(self, valor):
-        self.__sede_Inicial = valor
+    def set_viaje(self, viaje):
+        self.__viaje = viaje
 
-    sede_Inicial = property(get_sede_Inicial, set_sede_Inicial)
-
-    # getters y setters sedeFinal
-    def get_sede_Final(self):
-        return self.__sede_Final
-
-    def set_sede_Final(self, valor):
-        self.__sede_Final = valor
-
-    sede_Final = property(get_sede_Final, set_sede_Final)
-
+    viaje = property(get_viaje, set_viaje)
 # getters y setters kmsTotal
+
     def get_km_Total(self):
         return self.__km_Total
 
@@ -141,3 +135,11 @@ class Barco(ABC):
 
     def marchar(self, tiempo):
         self.sistema_propulsion.activar(tiempo)
+
+    @abstractmethod
+    def puede_cargar_contenedor(self, contenedor):
+        pass
+
+    def verificar_carga_contenedor(self, contenedor):
+        contenedor.get_peso < self.get_max_Peso() and len(
+            self.get_conteiner()) < self.get_max_Containers()
