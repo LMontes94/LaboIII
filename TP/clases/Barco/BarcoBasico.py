@@ -1,5 +1,6 @@
 from clases.Barco.Barco import Barco
 from clases.Contenedores.Contenedor import Contenedor
+from clases.Exception.NoHayBarcoException import NoHayBarcoException
 
 
 class BarcoBasico(Barco):
@@ -23,3 +24,14 @@ class BarcoBasico(Barco):
 
             self.peso_Actual = 0.0
         return listAux
+    
+    def manejar(self, contenedor):
+
+        try:
+            if self.puede_cargar_contenedor(contenedor):
+                self.cargar_conteiner(contenedor)
+            elif self.noHaySiguiente():
+                self.set_siguiente().manejar(contenedor)
+        except NoHayBarcoException as e:
+            print(f"Error {e.get_code()} / {e.get_mensaje()}")
+
